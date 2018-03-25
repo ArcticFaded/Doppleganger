@@ -32,17 +32,7 @@ import glob
 class Facenet(object):
     def triplet_loss(self, y_true, y_pred, alpha = 0.2):
         """
-        Implementation of the triplet loss as defined by formula (3)
-
-        Arguments:
-        y_true -- true labels, required when you define a loss in Keras, you don't need it in this function.
-        y_pred -- python list containing three objects:
-                anchor -- the encodings for the anchor images, of shape (None, 128)
-                positive -- the encodings for the positive images, of shape (None, 128)
-                negative -- the encodings for the negative images, of shape (None, 128)
-
-        Returns:
-        loss -- real number, value of the loss
+        Implementation of the triplet loss.
         """
 
         anchor, positive, negative = y_pred[0], y_pred[1], y_pred[2]
@@ -55,16 +45,7 @@ class Facenet(object):
 
     def who_is_it(self, image_path, database, model):
         """
-        Implements face recognition for the happy house by finding who is the person on the image_path image.
-
-        Arguments:
-        image_path -- path to an image
-        database -- database containing image encodings along with the name of the person on the image
-        model -- your Inception model instance in Keras
-
-        Returns:
-        min_dist -- the minimum distance between image_path encoding and the encodings from the database
-        identity -- string, the name prediction for the person on image_path
+        performs verify against a database
         """
 
         encoding = fr_utils.img_to_encoding(image_path, model)
@@ -87,16 +68,6 @@ class Facenet(object):
     def verify(self, image_path, identity, database, model):
         """
         Function that verifies if the person on the "image_path" image is "identity".
-
-        Arguments:
-        image_path -- path to an image
-        identity -- string, name of the person you'd like to verify the identity. Has to be a resident of the Happy house.
-        database -- python dictionary mapping names of allowed people's names (strings) to their encodings (vectors).
-        model -- your Inception model instance in Keras
-
-        Returns:
-        dist -- distance between the image_path and the image of "identity" in the database.
-        door_open -- True, if the door should open. False otherwise.
         """
 
         encoding = img_to_encoding(image_path, model)
@@ -152,14 +123,6 @@ class Facenet(object):
                 img = resize(frame[bottom:top, left:right, :],
                              (160, 160), mode='reflect')
                 imgs.append(img)
-#                 print(left, right)
-#                 print(top, bottom)
-#                 cv2.rectangle(frame,
-#                               (left-1, bottom-1),
-#                               (right+1, top+1),
-#                               (255, 0, 0), thickness=2)
-#                 print (left, top)
-#                 print(right, bottom)
                 frame = frame[bottom-1:top+1, left-1:right+1]
 
             resized_image = cv2.resize(frame, (96, 96))
@@ -182,15 +145,3 @@ class Facenet(object):
         self.names = []
         self.margin = 10
         self.loadDb()
-        # self.database["danielle"] = self.img_to_encoding("images/danielle.png", self.FRmodel)
-        # self.database["younes"] = img_to_encoding("images/younes.jpg", FRmodel)
-        # self.database["tian"] = img_to_encoding("images/tian.jpg", FRmodel)
-        # self.database["andrew"] = img_to_encoding("images/andrew.jpg", FRmodel)
-        # self.database["kian"] = img_to_encoding("images/kian.jpg", FRmodel)
-        # self.database["dan"] = img_to_encoding("images/dan.jpg", FRmodel)
-        # self.database["sebastiano"] = img_to_encoding("images/sebastiano.jpg", FRmodel)
-        # self.database["bertrand"] = img_to_encoding("images/bertrand.jpg", FRmodel)
-        # self.database["kevin"] = img_to_encoding("images/kevin.jpg", FRmodel)
-        # self.database["felix"] = img_to_encoding("images/felix.jpg", FRmodel)
-        # self.database["benoit"] = img_to_encoding("images/benoit.jpg", FRmodel)
-        # self.database["arnaud"] = img_to_encoding("images/arnaud.jpg", FRmodel)

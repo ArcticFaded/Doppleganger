@@ -16,7 +16,8 @@ const Home = () => {
     };
     Axios.get('http://127.0.0.1:5000/v1/capture', config)
       .then(function(response){
-          alert("similar");
+          console.log(response)
+          alert(response.data);
           console.log(response);
       }, function(error){
         alert("error");

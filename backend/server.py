@@ -1,5 +1,5 @@
 from utils import facenet
-from flask import Flask, send_file, request
+from flask import Flask, send_file, request, jsonify
 from flask_cors import CORS
 import os
 
@@ -16,7 +16,7 @@ comparer = facenet.Facenet()
 def capture():
     similarity, name, food = comparer.get_frame("mine",  'utils/support/haarcascade_frontalface_alt2.xml')
     print (similarity, food)
-    return send_file(name, mimetype='image/gif')
+    return jsonify(food[0])
 
 @app.route("/v1/compare", methods=['GET','POST'])
 def compare():
